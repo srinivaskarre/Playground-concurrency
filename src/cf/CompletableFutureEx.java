@@ -16,7 +16,14 @@ public class CompletableFutureEx {
                 .thenApply(orderservice::enrichOrder)
                 .thenApply(orderservice::payment)
                 .thenApply(orderservice::dispatch)
-                .thenApplyAsync(orderservice::sendEmail);
+                .thenApply(orderservice::sendEmail);
+
+        CompletableFuture<Integer> integerCompletableFuture = CompletableFuture.supplyAsync(orderservice::getOrder)
+                .thenApply(orderservice::enrichOrder)
+                .thenApply(orderservice::payment)
+                .thenApply(orderservice::dispatch)
+                .thenCompose(order -> CompletableFuture.supplyAsync(() -> 1 + 2));
+        System.out.println(integerCompletableFuture.get());
 
         Thread.sleep(10000);
 
